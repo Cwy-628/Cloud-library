@@ -3,12 +3,15 @@ package com.yyy.picturecloudbackend.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.yyy.picturecloudbackend.api.aliyunai.model.CreateOutPaintingTaskResponse;
 import com.yyy.picturecloudbackend.model.dto.picture.*;
 import com.yyy.picturecloudbackend.model.entity.Picture;
 import com.yyy.picturecloudbackend.model.entity.User;
 import com.yyy.picturecloudbackend.model.vo.PictureVO;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
 * @author jeffery
@@ -100,4 +103,11 @@ public interface PictureService extends IService<Picture> {
      * @param picture
      */
     void checkPictureAuth(User loginUser, Picture picture);
+
+    List<PictureVO> searchPictureByColor(Long spaceId, String picColor, User loginUser);
+
+    @Transactional(rollbackFor = Exception.class)
+    void editPictureByBatch(PictureEditByBatchRequest pictureEditByBatchRequest, User loginUser);
+
+    CreateOutPaintingTaskResponse createPictureOutPaintingTask(CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest, User loginUser);
 }
