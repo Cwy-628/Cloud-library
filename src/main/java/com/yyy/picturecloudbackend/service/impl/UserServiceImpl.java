@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yyy.picturecloudbackend.exception.BusinessException;
 import com.yyy.picturecloudbackend.exception.ErrorCode;
+import com.yyy.picturecloudbackend.manager.auth.StpKit;
 import com.yyy.picturecloudbackend.mapper.UserMapper;
 import com.yyy.picturecloudbackend.model.dto.user.UserQueryRequest;
 import com.yyy.picturecloudbackend.model.entity.User;
@@ -106,8 +107,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.PARAMS_ERROR,"用户不存在");
         }
         // 4. 保存用户的登录态
+        // 3. 记录用户的登录态
         request.getSession().setAttribute(USER_LOGIN_STATE, user);
+        // 4. 记录用户登录态到 Sa-token，便于空间鉴权时使用，注意保证该用户信息与 SpringSession 中的信息过期时间一致
+        StpKit.SPACE.login(user.getId());
+        StpKit.SPACE.getSession().set(USER_LOGIN_STATE, user);
         return this.getLoginUserVO(user);
+
     }
 
     /**

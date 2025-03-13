@@ -1,5 +1,6 @@
 package com.yyy.picturecloudbackend.api.aliyunai;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
